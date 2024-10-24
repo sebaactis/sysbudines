@@ -1,0 +1,1 @@
+export const base_url = "https://portfolio-e0ccd-default-rtdb.firebaseio.com/"
