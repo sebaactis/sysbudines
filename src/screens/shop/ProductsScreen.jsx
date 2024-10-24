@@ -18,15 +18,11 @@ export default function ProductsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setProductsFiltered(productsFilteredCategory)
         if (search) {
             setProductsFiltered(productsFiltered.filter(product => product.nombre.toLowerCase().includes(search.toLowerCase())));
         }
-    }, [search])
-
-    useEffect(() => {
-        setProductsFiltered(productsFilteredCategory)
-    }, [])
-
+    }, [search, productsFilteredCategory])
     const renderProductItem = ({ item }) => {
         return (
             <Pressable onPress={() => {
@@ -36,7 +32,7 @@ export default function ProductsScreen({ navigation }) {
                 <FlatCard style={styles.productCardItem}>
                     <View style={styles.productImageContainer}>
                         <Image
-                            source={item.image}
+                            source={{uri: item.image}}
                             style={styles.image}
                         />
                     </View>

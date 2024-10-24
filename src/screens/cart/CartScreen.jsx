@@ -9,8 +9,6 @@ const CartScreen = () => {
   const cart = useSelector(state => state.cartReducer.items)
   const total = useSelector(state => state.cartReducer.total)
 
-  console.log( total);
-
   return (
     <View style={styles.cartContainer}>
       <Text style={styles.cartTitle}>Tu carrito</Text>

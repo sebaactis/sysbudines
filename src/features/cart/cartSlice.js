@@ -13,7 +13,6 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem: (state, action) => {
-
             const productInCart = state.items.find(item => item.id === action.payload.id);
             if (!productInCart) {
                 state.items.push(action.payload);
@@ -31,7 +30,22 @@ export const cartSlice = createSlice({
             state.updatedAt = new Date().toLocaleString()
         },
         removeItem: (state, action) => {
+            const productInCart = state.items.find(item => item.id === action.payload.id);
+            if (productInCart.quantity === 1) {
+                state.items.pop(action.payload);
+            } else {
+                state.items.map(item => {
+                    if (item.id === productInCart.id) {
+                        item.quantity -= 1
+                        return item;
+                    }
+                    return item;
+                })
+            }
 
+            const total = calculate_total_price(state.items)
+            state.total = total;
+            state.updatedAt = new Date().toLocaleString()
         }
     }
 })

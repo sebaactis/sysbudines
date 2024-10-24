@@ -26,5 +26,6 @@ const styles = StyleSheet.create({
   },
   logoHeader: {
     width: 180,
+    marginTop: 30
   },
 });

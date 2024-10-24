@@ -1,8 +1,13 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react'
 import { colors } from '../global/colors'
+import { useDispatch } from 'react-redux'
+import { removeItem, addItem } from '../features/cart/cartSlice'
 
 const CartCard = ({ item }) => {
+
+    const dispatch = useDispatch();
+
     return (
         <View style={styles.cardItemContainer}>
             <View style={styles.cardHeaderContainer}>
@@ -13,7 +18,7 @@ const CartCard = ({ item }) => {
                 </View>
                 <View style={styles.imageContainer}>
                     <Image
-                        source={item.image}
+                        source={{uri: item.image}}
                         style={styles.imageStyle}
                     />
                 </View>
@@ -24,11 +29,11 @@ const CartCard = ({ item }) => {
                     <Text style={styles.cartBodySubText}>Subtotal: <Text style={styles.cardBodySubPrice}>${item.precio * item.quantity}</Text></Text>
                 </View>
                 <View style={styles.cardBodyCantidadContainer}>
-                    <Pressable style={styles.cantidadBtnD}>
+                    <Pressable onPress={() => dispatch(removeItem(item))} style={styles.cantidadBtnD}>
                         <Text>-</Text>
                     </Pressable>
                     <Text>{item.quantity}</Text>
-                    <Pressable style={styles.cantidadBtnI}>
+                    <Pressable onPress={() => dispatch(addItem({ ...item, quantity: 1 }))} style={styles.cantidadBtnI}>
                         <Text>+</Text>
                     </Pressable>
                 </View>

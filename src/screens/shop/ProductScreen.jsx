@@ -19,7 +19,7 @@ const ProductScreen = ({ navigation }) => {
                 <Text style={styles.productPrice}>${product.precio}</Text>
                 <View style={styles.productImageCont}>
                     <Image
-                        source={product.image}
+                        source={{uri: product.image}}
                         style={styles.image}
                     />
                 </View>

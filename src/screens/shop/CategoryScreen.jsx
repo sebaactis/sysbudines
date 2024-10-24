@@ -23,7 +23,7 @@ export default function CategoryScreen({ navigation }) {
         <FlatCard
           style={index % 2 === 0 ? { ...styles.row, ...styles.categoryCard } : { ...styles.rowReverse, ...styles.categoryCard }}
         >
-          <Image source={item.image} style={styles.image} resizeMode="contain" />
+          <Image source={{uri: item.image}} style={styles.image} resizeMode="contain" />
           <Text style={styles.cardTitle}>{item.nombre}</Text>
         </FlatCard>
       </Pressable>
