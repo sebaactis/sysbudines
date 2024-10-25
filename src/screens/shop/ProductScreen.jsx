@@ -4,33 +4,55 @@ import { colors } from '../../global/colors';
 import PressableBack from '../../components/PressableBack';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../../features/cart/cartSlice';
+import { useEffect, useState } from 'react';
+import { useGetProductQuery } from '../../services/shopService';
+import { ActivityIndicator } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const ProductScreen = ({ navigation }) => {
-
-    const product = useSelector(state => state.shopReducer.productSelected);
     const dispatch = useDispatch();
 
+    const productId = useSelector(state => state.shopReducer.productId);
+    const { data: product, error, isLoading } = useGetProductQuery(productId);
+
+    const handleAdd = (product) => {
+        dispatch(addItem({ ...product, quantity: 1 }))
+        Toast.show({
+            type: 'success',
+            text1: 'Muy bien!',
+            text2: 'El producto se ha agregado correctamente 👋',
+            visibilityTime: 2000,
+            
+        });
+    }
+
     return (
-        <ScrollView>
-            <PressableBack callback={() => navigation.goBack()} />
-            <View style={styles.productCont}>
-                <Text style={styles.productName}>{product.nombre}</Text>
-                <Text style={styles.productCategory}>{product.categoria}</Text>
-                <Text style={styles.productPrice}>${product.precio}</Text>
-                <View style={styles.productImageCont}>
-                    <Image
-                        source={{uri: product.image}}
-                        style={styles.image}
-                    />
-                </View>
-                <Text style={styles.productDescription}>{product.descripcionLarga}</Text>
-                <Pressable onPress={() => dispatch(addItem({ ...product, quantity: 1 }))} style={styles.carritoBtn}><Text style={styles.carritoBtnText}>Agregar al carrito</Text></Pressable>
-                <Pressable style={styles.favoritoBtn}>
-                    <HeartFavorite />
-                    <Text style={styles.favoritoBtnText}>Favorito</Text>
-                </Pressable>
-            </View>
-        </ScrollView>
+        <>
+            {isLoading
+                ? <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />
+                :
+                <ScrollView>
+                    
+                    <PressableBack callback={() => navigation.goBack()} />
+                    <View style={styles.productCont}>
+                        <Text style={styles.productName}>{product.nombre}</Text>
+                        <Text style={styles.productCategory}>{product.categoria}</Text>
+                        <Text style={styles.productPrice}>${product.precio}</Text>
+                        <View style={styles.productImageCont}>
+                            <Image
+                                source={{ uri: product.image }}
+                                style={styles.image}
+                            />
+                        </View>
+                        <Text style={styles.productDescription}>{product.descripcionLarga}</Text>
+                        <Pressable onPress={() => handleAdd(product)} style={styles.carritoBtn}><Text style={styles.carritoBtnText}>Agregar al carrito</Text></Pressable>
+                        <Pressable style={styles.favoritoBtn}>
+                            <HeartFavorite />
+                            <Text style={styles.favoritoBtnText}>Favorito</Text>
+                        </Pressable> 
+                    </View>
+                </ScrollView>}
+        </>
     )
 }
 
@@ -96,6 +118,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         fontStyle: "italic",
+    },
+    spinner: {
+        margin: "auto"
     }
 })
 

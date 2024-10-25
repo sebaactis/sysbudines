@@ -44,7 +44,7 @@ const initialState = {
     products: products,
     categorySelected: "",
     productFilteredCategory: [],
-    productSelected: ""
+    productId: null
 }
 
 export const shopSlice = createSlice({
@@ -56,8 +56,7 @@ export const shopSlice = createSlice({
             state.categorySelected = action.payload
         },
         setProduct: (state, action) => {
-            console.log(action.payload);
-            state.productSelected = products.find(product => product.id === action.payload)
+            state.productId = action.payload
         }
     }
 })

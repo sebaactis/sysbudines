@@ -8,6 +8,7 @@ import PressableBack from '../../components/PressableBack';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../features/shop/shopSlice';
 import { useGetProductsByCategoryQuery } from '../../services/shopService';
+import { ActivityIndicator } from 'react-native';
 
 export default function ProductsScreen({ navigation }) {
     const [productsFiltered, setProductsFiltered] = useState([]);
@@ -23,6 +24,8 @@ export default function ProductsScreen({ navigation }) {
             setProductsFiltered(productsFiltered.filter(product => product.nombre.toLowerCase().includes(search.toLowerCase())));
         }
     }, [search, productsFilteredCategory])
+
+
     const renderProductItem = ({ item }) => {
         return (
             <Pressable onPress={() => {
@@ -32,7 +35,7 @@ export default function ProductsScreen({ navigation }) {
                 <FlatCard style={styles.productCardItem}>
                     <View style={styles.productImageContainer}>
                         <Image
-                            source={{uri: item.image}}
+                            source={{ uri: item.image }}
                             style={styles.image}
                         />
                     </View>
@@ -47,24 +50,28 @@ export default function ProductsScreen({ navigation }) {
     }
 
     return (
-        <View>
-            <PressableBack callback={() => navigation.goBack()} />
-            <Text style={styles.productosTitle}>Productos</Text>
-            <Search setSearch={setSearch} />
-            <FlatList
-                data={productsFiltered}
-                keyExtractor={prod => prod.id}
-                renderItem={renderProductItem}
-                numColumns={2}
-            />
-        </View>
+        <>
+            {isLoading ? <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} /> :
+                <View>
+                    <PressableBack callback={() => navigation.goBack()} />
+                    <Text style={styles.productosTitle}>Productos</Text>
+                    <Search setSearch={setSearch} />
+                    <FlatList
+                        data={productsFiltered}
+                        keyExtractor={prod => prod.id}
+                        renderItem={renderProductItem}
+                        numColumns={2}
+                    />
+                </View>}
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     productosTitle: {
         textAlign: "center",
-        marginVertical: 15,
+        marginTop: 5,
+        marginBottom: 10,
         fontSize: 20,
         fontWeight: "bold",
     },

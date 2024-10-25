@@ -11,7 +11,6 @@ export default function CategoryScreen({ navigation }) {
   const { data: categories, error, isLoading} = useGetCategoriesQuery();
   const dispatch = useDispatch();
 
-
   const renderCategoryItem = ({ item, index }) => {
     return (
       <Pressable
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 30,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "800",
     fontFamily: 'Khand-Regular'
   },
   categoryCard: {
