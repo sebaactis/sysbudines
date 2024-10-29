@@ -2,14 +2,35 @@ import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React, { useMemo } from 'react'
 import CartCard from '../../components/CartCard';
 import { colors } from '../../global/colors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { usePostOrderMutation } from '../../services/orderService';
+import { clearCart } from '../../features/cart/cartSlice';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
 
+  const [triggerPost, result] = usePostOrderMutation();
   const cart = useSelector(state => state.cartReducer.items)
   const cartLength = cart.length <= 0
   const total = useSelector(state => state.cartReducer.total)
+  const dispatch = useDispatch();
+
+  const handleCreateOrder = () => {
+    triggerPost(
+      {
+        orderId: uuidv4(),
+        cart,
+        total,
+        date: new Date(),
+        user: 'admin'
+      }
+    )
+
+    dispatch(clearCart())
+  }
+
 
   return (
     <View style={styles.cartContainer}>
@@ -28,7 +49,7 @@ const CartScreen = () => {
       </View>
       {cartLength ? null : <Text style={styles.cartTotalPrice}>Total: ${total}</Text>}
       {cartLength ? null : <Pressable style={styles.cartFinalizarBtn}>
-        <Text style={styles.cartFinalizarBtnText}>Finalizar Compra</Text>
+        <Text onPress={() => handleCreateOrder()} style={styles.cartFinalizarBtnText}>Finalizar Compra</Text>
       </Pressable>}
     </View>
   )

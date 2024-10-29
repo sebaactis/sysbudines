@@ -1,13 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Header from "./src/components/Header";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
-import TabNavigator from "./src/navigation/TabNavigator";
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from "react-redux";
 import { store } from "./src/app/store";
+import MainNavigator from "./src/navigation/MainNavigator";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,8 +34,7 @@ export default function App() {
     <Provider store={store}>
       <SafeAreaProvider>
         <View style={styles.appCont}>
-          <Header />
-          <TabNavigator />
+          <MainNavigator />
         </View>
       </SafeAreaProvider>
     </Provider>

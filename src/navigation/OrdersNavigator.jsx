@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CartScreen from '../screens/cart/CartScreen';
 import OrdersScreen from '../screens/orders/OrdersScreen';
 
-
 const Stack = createNativeStackNavigator();
 
 const OrdersNavigator = () => {

@@ -1,20 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import ShopNavigator from './ShopNavigator';
 import CartNavigator from './CartNavigator';
 import OrdersNavigator from './OrdersNavigator';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { colors } from '../global/colors';
+import Header from '../components/Header';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
     return (
-        <NavigationContainer>
             <Tab.Navigator
                 screenOptions={{
-                    headerShown: false,
+                    header: () => (<Header />),
                     tabBarStyle: styles.tabBar
                 }}
             >
@@ -39,7 +38,6 @@ const TabNavigator = () => {
                         tabBarIcon: ({ focused }) => (<Icon name="clipboard-list" size={32} color={focused ? colors.cardColor : colors.principal} />)
                     }} />
             </Tab.Navigator>
-        </NavigationContainer>
     )
 }
 

@@ -15,7 +15,7 @@ const OrderCard = ({ order }) => {
     return (
         <View style={styles.orderCardContainer}>
             <View style={styles.orderDataCont}>
-                <Text style={styles.orderNumber}>Order Number: <Text>{order.id}</Text></Text>
+                <Text style={styles.orderNumber}>Order Number: <Text>{order.orderId.slice(0, 8).toUpperCase()}</Text></Text>
                 <Text style={styles.orderDate}>Order Date: {new Date((order.date)).toLocaleString('es-Ar', dateOptions)}</Text>
                 <Text style={styles.orderPrice}>Total: ${order.total}</Text>
             </View>
