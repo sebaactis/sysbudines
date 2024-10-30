@@ -10,7 +10,6 @@ const Stack = createNativeStackNavigator()
 const MainNavigator = () => {
 
     const user = useSelector(state => state.authReducer.email)
-
     return (
         <NavigationContainer>
             {user ? <TabNavigator /> : <AuthNavigator />}

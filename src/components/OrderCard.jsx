@@ -1,17 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { dateOptions } from '../global/constants'
 
-const dateOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-};
 
-const OrderCard = ({ order }) => {
+
+const OrderCard = ({ order, navigation }) => {
+
     return (
         <View style={styles.orderCardContainer}>
             <View style={styles.orderDataCont}>
@@ -19,7 +14,7 @@ const OrderCard = ({ order }) => {
                 <Text style={styles.orderDate}>Order Date: {new Date((order.date)).toLocaleString('es-Ar', dateOptions)}</Text>
                 <Text style={styles.orderPrice}>Total: ${order.total}</Text>
             </View>
-            <Pressable style={styles.orderBtn}>
+            <Pressable onPress={() => navigation.navigate("Order", { orderId: order.orderId })} style={styles.orderBtn}>
                 <Text style={styles.orderBtnText}>View details</Text>
             </Pressable>
         </View>

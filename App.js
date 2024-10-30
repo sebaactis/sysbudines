@@ -7,8 +7,34 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from "react-redux";
 import { store } from "./src/app/store";
 import MainNavigator from "./src/navigation/MainNavigator";
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 
 SplashScreen.preventAutoHideAsync();
+
+const toastConfig = {
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{
+        marginTop: 20,
+        borderLeftColor: "#0c8308"
+      }}
+      text1Style={{ fontSize: 15 }}
+      text2Style={{ fontSize: 13 }}
+    />
+  ),
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      style={{
+        marginTop: 20,
+        borderLeftColor: "#8c0808"
+      }}
+      text1Style={{ fontSize: 15 }}
+      text2Style={{ fontSize: 13 }}
+    />
+  ),
+}
 
 export default function App() {
 
@@ -35,6 +61,7 @@ export default function App() {
       <SafeAreaProvider>
         <View style={styles.appCont}>
           <MainNavigator />
+          <Toast config={toastConfig} />
         </View>
       </SafeAreaProvider>
     </Provider>

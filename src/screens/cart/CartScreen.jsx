@@ -15,6 +15,7 @@ const CartScreen = ({ navigation }) => {
   const cart = useSelector(state => state.cartReducer.items)
   const cartLength = cart.length <= 0
   const total = useSelector(state => state.cartReducer.total)
+  const user = useSelector(state => state.authReducer.email)
   const dispatch = useDispatch();
 
   const handleCreateOrder = () => {
@@ -24,7 +25,7 @@ const CartScreen = ({ navigation }) => {
         cart,
         total,
         date: new Date(),
-        user: 'admin'
+        user
       }
     )
 

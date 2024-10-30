@@ -13,11 +13,17 @@ export const orderApi = createApi({
             })
         }),
         getOrders: builder.query({
-            query: () => `orders.json`,
+            query: (user) => `orders.json?orderBy="user"&equalTo="${user}"`,
             transformResponse: (response) => (
-                response ? Object.values(response) : []) 
+                response ? Object.values(response) : [])
+        }),
+        getOrder: builder.query({
+            query: (orderId) => `orders.json?orderBy="orderId"&equalTo="${orderId}"`,
+            transformResponse: (response) => (
+                response ? Object.values(response)[0] : null
+            )
         })
     })
 })
 
-export const { usePostOrderMutation, useGetOrdersQuery } = orderApi
+export const { usePostOrderMutation, useGetOrdersQuery, useGetOrderQuery } = orderApi

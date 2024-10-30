@@ -5,11 +5,13 @@ import { useGetOrdersQuery } from '../../services/orderService';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../../global/colors';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
-export default function OrdersScreen() {
+export default function OrdersScreen({ navigation }) {
 
-  const { data: orders, error, isLoading, refetch } = useGetOrdersQuery();
+  const user = useSelector(state => state.authReducer.email)
+  const { data: orders, error, isLoading, refetch } = useGetOrdersQuery("sebaactis@gmail.com");
 
   useFocusEffect(
     useCallback(() => {
@@ -25,8 +27,7 @@ export default function OrdersScreen() {
         <View style={styles.ordersCont}>
           {
             orders.map(order => (
-              <OrderCard key={order.orderId} order={order} />
-
+              <OrderCard key={order.orderId} order={order} navigation={navigation} />
             ))
           }
         </View>}
