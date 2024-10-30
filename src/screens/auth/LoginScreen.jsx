@@ -35,7 +35,10 @@ const RegisterScreen = ({ navigation }) => {
       style={styles.gradient}
     >
       <View style={styles.registerCont}>
-        <Text style={styles.registerTitle}>Iniciar Sesión</Text>
+        <View style={styles.titlesCont}>
+          <Text style={styles.registerTitle}>Bienvenido/a de nuevo!</Text>
+          <Text style={styles.registerSubTitle}>Iniciar Sesión para continuar</Text>
+        </View>
         <View style={styles.inputsCont}>
           <TextInput
             placeholder='Email'
@@ -51,7 +54,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={(text) => setPassword(text)}
           />
         </View>
-        <Pressable onPress={onSubmit} style={styles.registerBtn}><Text>Loguearse</Text></Pressable>
+        <Pressable onPress={onSubmit} style={styles.registerBtn}><Text style={styles.registerBtnText}>Login</Text></Pressable>
         <Text style={styles.textCuenta}>No tienes cuenta? <Text onPress={() => navigation.navigate("Register")} style={styles.subTextCuenta}>Ingresá acá</Text></Text>
       </View>
     </LinearGradient>
@@ -64,40 +67,57 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
   },
   registerCont: {
     justifyContent: 'center',
-    alignItems: 'center'
+    marginHorizontal: 40
+  },
+  titlesCont: {
+    marginBottom: 30
   },
   registerTitle: {
     fontWeight: '800',
-    fontSize: 18,
+    fontSize: 23,
+    marginBottom: 10,
+  },
+  registerSubTitle: {
+    fontSize: 14,
     marginBottom: 20,
+    textAlign: 'left',
+    fontStyle: 'italic',
   },
   inputsCont: {
     gap: 15,
-    width: '90%'
   },
   input: {
-    backgroundColor: "#94949482",
+    backgroundColor: "#ffffffcb",
     paddingRight: 80,
     paddingLeft: 15,
-    paddingVertical: 17,
-    borderRadius: 10,
+    paddingVertical: 22,
+    borderRadius: 30,
     textAlign: 'start'
   },
   registerBtn: {
-    backgroundColor: "#4400598b",
-    paddingHorizontal: 35,
-    paddingVertical: 15,
-    marginTop: 15,
-    borderRadius: 15
+    backgroundColor: "#f7d7ab",
+    paddingHorizontal: 30,
+    paddingVertical: 18,
+    marginTop: 30,
+    borderRadius: 30,
+    alignItems: 'center',
+    
+  },
+  registerBtnText: {
+    fontSize: 17,
+    fontWeight: '800',
   },
   textCuenta: {
-    marginTop: 20
+    marginTop: 27,
+    textAlign: 'center',
+    fontSize: 15
   },
   subTextCuenta: {
     textDecorationLine: 'underline',
+    color: '#f7d7ab',
+    fontStyle: 'italic',
   }
 })
