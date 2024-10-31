@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 export default function OrdersScreen({ navigation }) {
 
   const user = useSelector(state => state.authReducer.email)
-  const { data: orders, error, isLoading, refetch } = useGetOrdersQuery("sebaactis@gmail.com");
+  const { data: orders, error, isLoading, refetch } = useGetOrdersQuery(user);
 
   useFocusEffect(
     useCallback(() => {

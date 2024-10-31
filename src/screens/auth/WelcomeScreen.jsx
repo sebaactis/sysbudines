@@ -4,8 +4,13 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { colors } from '../../global/colors'
 import logo from "../../../assets/logoSS.png";
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../features/auth/authSlice';
 
 const WelcomeScreen = ({ navigation }) => {
+
+    const dispatch = useDispatch()
+
     return (
         <LinearGradient
             colors={[colors.principal, '#8b5100']}
@@ -26,6 +31,7 @@ const WelcomeScreen = ({ navigation }) => {
                     <Text style={styles.welcomeBtnText}>Registrarse</Text>
                 </Pressable>
             </View>
+            <Text onPress={() => dispatch(setUser({ email: "Invited", token: null }))} style={styles.welcomeInvitado}>Ingresar como invitado</Text>
             <View style={styles.welcomeRedes}>
                 <Text style={styles.redesText}>Nuestras redes</Text>
                 <Icon onPress={() => Linking.openURL('https://www.instagram.com/sysbudines/')} name="instagram" size={34} />
@@ -76,6 +82,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 10
+    },
+    welcomeInvitado: {
+        fontSize: 14,
+        textDecorationLine: 'underline',
     },
     redesText: {
         fontSize: 13,
