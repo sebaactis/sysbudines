@@ -20,7 +20,7 @@ const RegisterScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (result.status === "rejected") {
-      console.log("Error al loguearse", result)
+      console.log("Error al loguearse", result.error.data.error)
     } else if (result.status === "fulfilled") {
       console.log("Usuario logueado")
       dispatch(setUser(result.data))

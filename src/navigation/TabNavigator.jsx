@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { colors } from '../global/colors';
 import Header from '../components/Header';
 import ProfileNavigator from './ProfileNavigator';
+import LocationNavigator from './LocationNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,6 +44,12 @@ const TabNavigator = () => {
                 component={ProfileNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="user-circle" size={32} color={focused ? colors.cardColor : colors.principal} />)
+                }} />
+            <Tab.Screen
+                name="Location"
+                component={LocationNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (<Icon name="search-location" size={32} color={focused ? colors.cardColor : colors.principal} />)
                 }} />
         </Tab.Navigator>
     )
