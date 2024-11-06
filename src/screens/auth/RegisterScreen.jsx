@@ -5,6 +5,7 @@ import { colors } from '../../global/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../features/auth/authSlice'
+import { showToast } from '../../utils/functions'
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -16,15 +17,16 @@ const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch()
 
   const onSubmit = () => {
+    if (password !== confirmPassword) return showToast('error', 'Las constraseñas no coinciden 😕', 'Por favor, revise la información', 2000)
     triggerRegister({ email, password })
   }
 
   useEffect(() => {
     if (result.status === "rejected") {
-      console.log("Error al agregar el usuario", result)
+      showToast('error', 'Error al registrarse ❌', "Por favor, intente nuevamente", 2000)
     } else if (result.status === "fulfilled") {
-      console.log("Usuario agregado con éxito")
-      dispatch(setUser(result.data))
+      showToast('success', 'Registro exitoso! ✅', 'Será redirigido en breve...', 2000)
+      setTimeout(() => { dispatch(setUser(result.data)) }, 2500)
     }
   }, [result])
 

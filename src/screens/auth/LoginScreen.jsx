@@ -5,6 +5,8 @@ import { colors } from '../../global/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../features/auth/authSlice'
+import Toast from 'react-native-toast-message'
+import { showToast } from '../../utils/functions'
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -20,10 +22,12 @@ const RegisterScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (result.status === "rejected") {
-      console.log("Error al loguearse", result.error.data.error)
-    } else if (result.status === "fulfilled") {
-      console.log("Usuario logueado")
-      dispatch(setUser(result.data))
+
+      showToast('error', 'Error al internar loguearse! ❌', `Motivo: ${result.error.data.error.errors[0].message}`, 2500)
+    }
+    else if (result.status === "fulfilled") {
+      showToast('success', 'Logueo exitoso! ✅', "Ingresaras en un momento", 2500)
+      setTimeout(() => { dispatch(setUser(result.data)) }, 2500)
     }
   }, [result])
 
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 30,
     alignItems: 'center',
-    
+
   },
   registerBtnText: {
     fontSize: 17,

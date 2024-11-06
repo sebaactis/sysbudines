@@ -7,7 +7,7 @@ import { addItem } from '../../features/cart/cartSlice';
 import { useEffect, useState } from 'react';
 import { useGetProductQuery } from '../../services/shopService';
 import { ActivityIndicator } from 'react-native';
-import Toast from 'react-native-toast-message';
+import { showToast } from '../../utils/functions';
 
 const ProductScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -17,13 +17,12 @@ const ProductScreen = ({ navigation }) => {
 
     const handleAdd = (product) => {
         dispatch(addItem({ ...product, quantity: 1 }))
-        Toast.show({
-            type: 'success',
-            text1: 'Muy bien!',
-            text2: 'El producto se ha agregado correctamente 👋',
-            visibilityTime: 2000,
-            
-        });
+        showToast(
+            'success',
+            'Muy bien!',
+            'El producto se ha agregado correctamente 👋',
+            2000,
+        );
     }
 
     return (
@@ -32,7 +31,7 @@ const ProductScreen = ({ navigation }) => {
                 ? <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />
                 :
                 <ScrollView>
-                    
+
                     <PressableBack callback={() => navigation.goBack()} />
                     <View style={styles.productCont}>
                         <Text style={styles.productName}>{product.nombre}</Text>
@@ -49,7 +48,7 @@ const ProductScreen = ({ navigation }) => {
                         <Pressable style={styles.favoritoBtn}>
                             <HeartFavorite />
                             <Text style={styles.favoritoBtnText}>Favorito</Text>
-                        </Pressable> 
+                        </Pressable>
                     </View>
                 </ScrollView>}
         </>

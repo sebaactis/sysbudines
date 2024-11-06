@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import FlatCard from '../../components/FlatCard';
 import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
+import { showToast } from '../../utils/functions';
 
 const GEO_URL = process.env.EXPO_PUBLIC_GEOCODING_API_KEY
 
@@ -14,14 +15,6 @@ const LocationScreen = () => {
     const [error, setError] = useState(null);
     const [address, setAddress] = useState("")
     const [title, setTitle] = useState("")
-
-    const showToast = (type, message) => {
-        Toast.show({
-            type: type,
-            text1: message,
-            visibilityTime: 2000,
-        });
-    };
 
     const renderPlaceItem = ({ item }) => (
         <FlatCard style={styles.placeContainer}>
@@ -60,6 +53,7 @@ const LocationScreen = () => {
         if (!permissionOk) {
             setErrorMsg('Permission to access location was denied');
         } else {
+            showToast('info', "Obteniendo su localización actual...", "Aguarde un momento por favor", 2000)
             let location = await Location.getCurrentPositionAsync({});
             if (location) {
                 const response = await fetch(
@@ -73,10 +67,10 @@ const LocationScreen = () => {
                 } else {
                     console.log('Error en geocodificación inversa:', data.error_message)
                 }
-                showToast("success", "¡Ubicación obtenida!")
+                showToast("success", "¡Ubicación obtenida!", "", 2000)
             } else {
                 setErrorMsg('Error getting location');
-                showToast("error", "No se pudo obtener la ubicación")
+                showToast("error", "No se pudo obtener la ubicación", "", 2000)
             }
 
             setLocation(location.coords);
@@ -105,11 +99,12 @@ const LocationScreen = () => {
                         <Icon name="add-circle-outline" size={32} color="orange" />
                     </Pressable>
                 </View>
-                <FlatList
+                {places.length <= 0 && <Text style={styles.dontHavePlacesText}>No tienes ubicaciones actualmente ☹️</Text>}
+                {places && <FlatList
                     data={places}
                     keyExtractor={item => item.id}
                     renderItem={renderPlaceItem}
-                />
+                />}
             </View>
         </>
     );
@@ -131,7 +126,7 @@ const styles = StyleSheet.create({
     locationInputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around', // Ajusta esto según tus necesidades
+        justifyContent: 'space-around',
         paddingHorizontal: 10,
     },
     locationInput: {
@@ -168,11 +163,15 @@ const styles = StyleSheet.create({
     mapTitle: {
         fontWeight: '700'
     },
-    address: {
-
-    },
     placeDescriptionContainer: {
         width: '60%',
         padding: 8
+    },
+    dontHavePlacesText: {
+        textAlign: 'center',
+        marginTop: 30,
+        fontSize: 18,
+        fontWeight: 700,
+        fontStyle: 'italic'
     }
 });
