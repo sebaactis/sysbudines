@@ -20,33 +20,33 @@ const TabNavigator = () => {
             }}
         >
             <Tab.Screen
-                name="Shop"
+                name="Tienda"
                 component={ShopNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="shopping-bag" size={32} color={focused ? colors.cardColor : colors.principal} />)
                 }}
             />
             <Tab.Screen
-                name="Cart"
+                name="Carrito"
                 component={CartNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="shopping-cart" size={32} color={focused ? colors.cardColor : colors.principal} />)
                 }}
             />
             <Tab.Screen
-                name="Orders"
+                name="Ordenes"
                 component={OrdersNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="clipboard-list" size={32} color={focused ? colors.cardColor : colors.principal} />)
                 }} />
             <Tab.Screen
-                name="Profile"
+                name="Perfil"
                 component={ProfileNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="user-circle" size={32} color={focused ? colors.cardColor : colors.principal} />)
                 }} />
             <Tab.Screen
-                name="Location"
+                name="Direcciones"
                 component={LocationNavigator}
                 options={{
                     tabBarIcon: ({ focused }) => (<Icon name="search-location" size={32} color={focused ? colors.cardColor : colors.principal} />)

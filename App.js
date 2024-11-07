@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "./src/app/store";
 import MainNavigator from "./src/navigation/MainNavigator";
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import { init } from "./src/db";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,6 +36,13 @@ const toastConfig = {
     />
   ),
 }
+
+init()
+  .then(() => console.log('Iniciando DB'))
+  .catch(err => {
+    console.log("Error inicializando DB")
+    console.log(err.message)
+  })
 
 export default function App() {
 

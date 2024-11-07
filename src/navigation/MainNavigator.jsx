@@ -5,7 +5,9 @@ import TabNavigator from "./TabNavigator";
 import AuthNavigator from "./AuthNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetProfileImageQuery } from "../services/userService";
-import { setProfileImage } from "../features/auth/authSlice";
+import { setProfileImage, setUser } from "../features/auth/authSlice";
+import { fetchSession } from "../db";
+
 
 const Stack = createNativeStackNavigator()
 
@@ -17,6 +19,22 @@ const MainNavigator = () => {
     const dispatch = useDispatch()
 
     const { data: profileImage, isLoading, error } = useGetProfileImageQuery(localId)
+
+    useEffect(() => {
+        if (!user) {
+            (async () => {
+                try {
+                    const session = await fetchSession()
+                    
+                    if (session.length) {
+                        dispatch(setUser(session[0]))
+                    }
+                } catch (error) {
+                    console.log("Error al obtener la sesión", error)
+                }
+            })()
+        }
+    }, [user])
 
     useEffect(() => {
         if (profileImage) {

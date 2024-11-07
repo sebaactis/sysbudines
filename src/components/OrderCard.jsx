@@ -10,12 +10,12 @@ const OrderCard = ({ order, navigation }) => {
     return (
         <View style={styles.orderCardContainer}>
             <View style={styles.orderDataCont}>
-                <Text style={styles.orderNumber}>Order Number: <Text>{order.orderId.slice(0, 8).toUpperCase()}</Text></Text>
-                <Text style={styles.orderDate}>Order Date: {new Date((order.date)).toLocaleString('es-Ar', dateOptions)}</Text>
+                <Text style={styles.orderNumber}>Nro de órden: <Text>{order.orderId.slice(0, 8).toUpperCase()}</Text></Text>
+                <Text style={styles.orderDate}>Fecha de órden: {new Date((order.date)).toLocaleString('es-Ar', dateOptions)}</Text>
                 <Text style={styles.orderPrice}>Total: ${order.total}</Text>
             </View>
             <Pressable onPress={() => navigation.navigate("Order", { orderId: order.orderId })} style={styles.orderBtn}>
-                <Text style={styles.orderBtnText}>View details</Text>
+                <Text style={styles.orderBtnText}>Ver detalles</Text>
             </Pressable>
         </View>
     )

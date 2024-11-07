@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '../../features/auth/authSlice'
 import Toast from 'react-native-toast-message'
 import { showToast } from '../../utils/functions'
+import { insertSession } from '../../db'
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -27,6 +28,11 @@ const RegisterScreen = ({ navigation }) => {
     }
     else if (result.status === "fulfilled") {
       showToast('success', 'Logueo exitoso! ✅', "Ingresaras en un momento", 2500)
+      insertSession({
+        email: result.data.email,
+        localId: result.data.localId,
+        token: result.data.idToken
+      }).then(result => console.log(result)).catch(error => console.log(error.message))
       setTimeout(() => { dispatch(setUser(result.data)) }, 2500)
     }
   }, [result])
