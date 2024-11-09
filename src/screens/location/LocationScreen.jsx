@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Location from 'expo-location';
@@ -6,15 +6,25 @@ import FlatCard from '../../components/FlatCard';
 import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import { showToast } from '../../utils/functions';
+import { useGetLocationsQuery, usePostLocationMutation } from '../../services/locationService';
+import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
+import { ActivityIndicator } from 'react-native';
+import { colors } from '../../global/colors';
+import { useFocusEffect } from '@react-navigation/native';
 
 const GEO_URL = process.env.EXPO_PUBLIC_GEOCODING_API_KEY
 
 const LocationScreen = () => {
+
+    const user = useSelector(state => state.authReducer.email)
+    const {data: locations = [], error, isLoading, refetch} = useGetLocationsQuery(user);
+
     const [location, setLocation] = useState(null);
-    const [places, setPlaces] = useState([])
-    const [error, setError] = useState(null);
     const [address, setAddress] = useState("")
     const [title, setTitle] = useState("")
+
+    const [triggerPostLocation, result] = usePostLocationMutation()
 
     const renderPlaceItem = ({ item }) => (
         <FlatCard style={styles.placeContainer}>
@@ -77,13 +87,36 @@ const LocationScreen = () => {
         }
     }
 
-    const savePlace = () => {
+    const savePlace = async () => {
         if (location && title) {
-            setPlaces(prevState => [...prevState, { "id": Math.random(), title, "coords": { "latitude": location.latitude, "longitude": location.longitude }, "address": address }])
-            setTitle("")
-            setLocation("")
+
+            const newPlace = {
+                id: uuidv4(),
+                title,
+                coords: {
+                    latitude: location.latitude,
+                    longitude: location.longitude
+                },
+                address,
+                user
+            };
+
+            try {
+
+                await triggerPostLocation(newPlace)
+                setTitle("");
+                setLocation("");
+            } catch (error) {
+                console.error("Error al subir la ubicación a Firebase:", error);
+            }
         }
     }
+
+    useFocusEffect(
+        useCallback(() => {
+          refetch()
+        }, [refetch])
+      );
 
     return (
         <>
@@ -99,9 +132,10 @@ const LocationScreen = () => {
                         <Icon name="add-circle-outline" size={32} color="orange" />
                     </Pressable>
                 </View>
-                {places.length <= 0 && <Text style={styles.dontHavePlacesText}>No tienes ubicaciones actualmente ☹️</Text>}
-                {places && <FlatList
-                    data={places}
+                {locations.length <= 0 && <Text style={styles.dontHavePlacesText}>No tienes ubicaciones actualmente ☹️</Text>}
+                {isLoading && <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />}
+                {locations && <FlatList
+                    data={locations}
                     keyExtractor={item => item.id}
                     renderItem={renderPlaceItem}
                 />}

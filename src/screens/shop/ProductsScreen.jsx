@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../features/shop/shopSlice';
 import { useGetProductsByCategoryQuery } from '../../services/shopService';
 import { ActivityIndicator } from 'react-native';
+import { capitalizeLetter } from '../../utils/functions';
 
 export default function ProductsScreen({ navigation }) {
     const [productsFiltered, setProductsFiltered] = useState([]);
@@ -41,7 +42,7 @@ export default function ProductsScreen({ navigation }) {
                     </View>
                     <View style={styles.productsData}>
                         <Text style={styles.productName}>{item.nombre}</Text>
-                        <Text style={styles.productCategoryText}>Categoria: {item.categoria}</Text>
+                        <Text style={styles.productCategoryText}>Categoria: {capitalizeLetter(item.categoria)}</Text>
                         <Text style={styles.productPrice}>${item.precio}</Text>
                     </View>
                 </FlatCard >

@@ -16,7 +16,7 @@ export const init = () => {
 
 export const insertSession = ({ email, localId, token }) => {
     const promise = new Promise((resolved, rejected) => {
-        const query = 'INSERT INTO sessions (localId, email, token) VALUES (?, ?, ?)'
+        const query = 'INSERT INTO sessions (email, localId, token) VALUES (?, ?, ?)'
         db.transaction(tx => tx.executeSql(query,
             [email, localId, token],
             (_, result) => resolved(result),

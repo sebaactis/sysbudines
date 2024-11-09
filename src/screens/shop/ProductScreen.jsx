@@ -7,7 +7,7 @@ import { addItem } from '../../features/cart/cartSlice';
 import { useEffect, useState } from 'react';
 import { useGetProductQuery } from '../../services/shopService';
 import { ActivityIndicator } from 'react-native';
-import { showToast } from '../../utils/functions';
+import { capitalizeLetter, showToast } from '../../utils/functions';
 
 const ProductScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const ProductScreen = ({ navigation }) => {
                     <PressableBack callback={() => navigation.goBack()} />
                     <View style={styles.productCont}>
                         <Text style={styles.productName}>{product.nombre}</Text>
-                        <Text style={styles.productCategory}>{product.categoria}</Text>
+                        <Text style={styles.productCategory}>{capitalizeLetter(product.categoria)}</Text>
                         <Text style={styles.productPrice}>${product.precio}</Text>
                         <View style={styles.productImageCont}>
                             <Image

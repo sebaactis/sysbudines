@@ -6,7 +6,7 @@ import { shopApi } from "../services/shopService";
 import { orderApi } from "../services/orderService";
 import { authApi } from "../services/authService";
 import { userApi } from "../services/userService";
-
+import { locationApi } from "../services/locationService";
 
 export const store = configureStore({
     reducer: {
@@ -16,7 +16,8 @@ export const store = configureStore({
         [shopApi.reducerPath]: shopApi.reducer,
         [orderApi.reducerPath]: orderApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
-        [userApi.reducerPath]: userApi.reducer
+        [userApi.reducerPath]: userApi.reducer,
+        [locationApi.reducerPath]: locationApi.reducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -24,4 +25,5 @@ export const store = configureStore({
             .concat(orderApi.middleware)
             .concat(authApi.middleware)
             .concat(userApi.middleware)
+            .concat(locationApi.middleware)
 })

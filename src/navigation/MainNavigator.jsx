@@ -25,7 +25,7 @@ const MainNavigator = () => {
             (async () => {
                 try {
                     const session = await fetchSession()
-                    
+                   
                     if (session.length) {
                         dispatch(setUser(session[0]))
                     }

@@ -12,3 +12,7 @@ export const showToast = (type, text1, text2, visibilityTime) => {
           visibilityTime,
      });
 }
+
+export const capitalizeLetter = (text) => {
+     return text.charAt(0).toUpperCase() + text.slice(1);
+ }

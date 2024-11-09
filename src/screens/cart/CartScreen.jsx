@@ -1,22 +1,24 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React, { useMemo } from 'react'
 import CartCard from '../../components/CartCard';
 import { colors } from '../../global/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { usePostOrderMutation } from '../../services/orderService';
 import { clearCart } from '../../features/cart/cartSlice';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { showToast } from '../../utils/functions';
 
 const CartScreen = ({ navigation }) => {
-
-  const [triggerPost, result] = usePostOrderMutation();
   const cart = useSelector(state => state.cartReducer.items)
-  const cartLength = cart.length <= 0
   const total = useSelector(state => state.cartReducer.total)
   const user = useSelector(state => state.authReducer.email)
+
+  const cartEmpty = cart.length <= 0
+  const shoppingImage = require('../../../assets/shoppingImage.jpeg')
+
   const dispatch = useDispatch();
+  const [triggerPost, result] = usePostOrderMutation();
 
   const handleCreateOrder = () => {
     triggerPost(
@@ -28,19 +30,22 @@ const CartScreen = ({ navigation }) => {
         user
       }
     )
-
+    showToast('success', 'Compra Finalizada! 🌟', 'Podes ver tu orden en la sección "ordenes"', 3500)
     dispatch(clearCart())
   }
-
 
   return (
     <View style={styles.cartContainer}>
       <Text style={styles.cartTitle}>Tu carrito</Text>
-      {cartLength
+      {cartEmpty
         &&
         <View style={styles.emptyCardContainer}>
-          <Icon name="cart-remove" size={50} />
-          <Text style={styles.cartEmptyText}>Tu carrito se encuentra vacio</Text>
+          <Image style={styles.shoppingImage} source={shoppingImage} resizeMode='contain' />
+          <Text style={styles.cartEmptyTextTitle}>Tu carrito está vacio</Text>
+          <Text style={styles.cartEmptyTextSubTitle}>Descubrí nuestros productos</Text>
+          <Pressable onPress={() => navigation.navigate("Tienda")} style={styles.cardEmptyBtn}>
+            <Text style={styles.cardEmptyBtnText}>Ver Productos</Text>
+          </Pressable>
         </View>
       }
       <View style={styles.cartItemsContainer}>
@@ -48,8 +53,8 @@ const CartScreen = ({ navigation }) => {
           <CartCard key={cartItem.id} item={cartItem} />
         ))}
       </View>
-      {cartLength ? null : <Text style={styles.cartTotalPrice}>Total: ${total}</Text>}
-      {cartLength ? null : <Pressable style={styles.cartFinalizarBtn}>
+      {cartEmpty ? null : <Text style={styles.cartTotalPrice}>Total: ${total}</Text>}
+      {cartEmpty ? null : <Pressable style={styles.cartFinalizarBtn}>
         <Text onPress={() => handleCreateOrder()} style={styles.cartFinalizarBtnText}>Finalizar Compra</Text>
       </Pressable>}
     </View>
@@ -65,7 +70,9 @@ const styles = StyleSheet.create({
   cartTitle: {
     textAlign: 'center',
     marginVertical: 13,
-    fontSize: 18
+    fontSize: 20,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
   },
   cartTotalPrice: {
     marginTop: 30,
@@ -85,11 +92,30 @@ const styles = StyleSheet.create({
   emptyCardContainer: {
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    gap: 13,
     marginTop: 30
   },
-  cartEmptyText: {
-    fontSize: 22,
-    fontWeight: "bold"
+  cartEmptyTextTitle: {
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  cartEmptyTextSubTitle: {
+    fontStyle: 'italic'
+  },
+  shoppingImage: {
+    width: 400,
+    height: 240,
+    borderRadius: 22
+  },
+  cardEmptyBtn: {
+    backgroundColor: colors.cardColor,
+    paddingHorizontal: 22,
+    paddingVertical: 13,
+    borderRadius: 15,
+    marginTop: 12
+  },
+  cardEmptyBtnText: {
+    fontWeight: 'bold',
   }
 })

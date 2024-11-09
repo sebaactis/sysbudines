@@ -8,7 +8,7 @@ import { FlatList } from 'react-native';
 const OrderScreen = ({ route }) => {
 
     const { orderId } = route.params;
-    const { data: order, error, isLoading } = useGetOrderQuery(orderId);
+    const { data: order, error, isLoading, refetch } = useGetOrderQuery(orderId);
 
     const renderCartItem = ({ item }) => {
         return (
