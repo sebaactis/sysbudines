@@ -6,19 +6,47 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../features/auth/authSlice'
 import { showToast } from '../../utils/functions'
+import { registerSchema } from '../../validations/registerSchema'
 
 const RegisterScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const [triggerRegister, result] = useRegisterMutation()
   const dispatch = useDispatch()
 
-  const onSubmit = () => {
-    if (password !== confirmPassword) return showToast('error', 'Las constraseñas no coinciden 😕', 'Por favor, revise la información', 2000)
-    triggerRegister({ email, password })
+  const onSubmit = async () => {
+    try {
+      setEmailError("")
+      setPasswordError("")
+      setConfirmPasswordError("")
+
+      await registerSchema.validate({ email, password, confirmPassword })
+      triggerRegister({ email, password })
+    } catch (error) {
+
+      switch (error.path) {
+        case "email":
+          setEmailError(error.message)
+          break
+        case "password":
+          console.log(error.message)
+          setPasswordError(error.message)
+          break
+        case "confirmPassword":
+          console.log(error.message)
+          setConfirmPasswordError(error.message)
+          break
+        default:
+          break
+      }
+    }
+
   }
 
   useEffect(() => {
@@ -47,6 +75,7 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={(text) => setEmail(text)}
           />
 
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
           <TextInput
             placeholder='Password'
             placeholderTextColor="#00000075"
@@ -54,12 +83,15 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={(text) => setPassword(text)}
           />
 
+          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
           <TextInput
             placeholder='Confirm Password'
             placeholderTextColor="#00000075"
             style={styles.input}
             onChangeText={(text) => setConfirmPassword(text)}
           />
+
+          {confirmPasswordError && <Text style={styles.error}>{confirmPasswordError}</Text>}
         </View>
         <Pressable onPress={onSubmit} style={styles.registerBtn}><Text style={styles.registerBtnText}>Registrarse</Text></Pressable>
         <Text style={styles.textCuenta}>Ya tienes una cuenta? <Text onPress={() => navigation.navigate("Login")} style={styles.subTextCuenta}>Ingresá acá</Text></Text>
@@ -117,5 +149,12 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#f7d7ab',
     fontStyle: 'italic',
+  },
+  error: {
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 16,
+    color: 'red',
+    fontStyle: 'italic'
   }
 })

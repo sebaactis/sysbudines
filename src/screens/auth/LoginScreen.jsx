@@ -8,17 +8,38 @@ import { setUser } from '../../features/auth/authSlice'
 import Toast from 'react-native-toast-message'
 import { showToast } from '../../utils/functions'
 import { insertSession } from '../../db'
+import { loginSchema } from '../../validations/loginSchema'
 
 const RegisterScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
 
   const [triggerLogin, result] = useLoginMutation()
   const dispatch = useDispatch()
 
-  const onSubmit = () => {
-    triggerLogin({ email, password })
+  const onSubmit = async () => {
+    try {
+      setEmailError("")
+      setPasswordError("")
+
+      await loginSchema.validate({ email, password })
+
+      triggerLogin({ email, password })
+
+    } catch (error) {
+
+      if (error.path === 'email') {
+        setEmailError(error.message)
+      }
+
+      if (error.path === 'password') {
+        setPasswordError(error.message)
+      }
+    }
+
   }
 
   useEffect(() => {
@@ -56,6 +77,7 @@ const RegisterScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => setEmail(text)}
           />
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <TextInput
             placeholder='Password'
@@ -63,6 +85,8 @@ const RegisterScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => setPassword(text)}
           />
+          
+          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
         </View>
         <Pressable onPress={onSubmit} style={styles.registerBtn}><Text style={styles.registerBtnText}>Login</Text></Pressable>
         <Text style={styles.textCuenta}>No tienes cuenta? <Text onPress={() => navigation.navigate("Register")} style={styles.subTextCuenta}>Ingresá acá</Text></Text>
@@ -129,5 +153,12 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#f7d7ab',
     fontStyle: 'italic',
+  },
+  error: {
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 16,
+    color: 'red',
+    fontStyle: 'italic'
   }
 })

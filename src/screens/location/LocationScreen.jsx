@@ -187,8 +187,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         borderRadius: 75,
-        overflow: "hidden",
-        elevation: 5,
+        overflow: "hidden"
     },
     map: {
         width: 120,
