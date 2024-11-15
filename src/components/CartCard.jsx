@@ -7,6 +7,7 @@ import { removeItem, addItem } from '../features/cart/cartSlice'
 const CartCard = ({ item }) => {
 
     const dispatch = useDispatch();
+    console.log(item)
 
     return (
         <View style={styles.cardItemContainer}>
@@ -46,7 +47,8 @@ export default CartCard
 
 const styles = StyleSheet.create({
     cardItemContainer: {
-        marginTop: 20
+        marginBottom: 20
+        
     },
     imageContainer: {
         backgroundColor: colors.cardColor,

@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Image, StyleSheet, ScrollView } from 'react-native'
-import { BackArrow, HeartFavorite } from '../../Icons';
+import { BackArrow } from '../../Icons';
 import { colors } from '../../global/colors';
 import PressableBack from '../../components/PressableBack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +8,13 @@ import { useEffect, useState } from 'react';
 import { useGetProductQuery } from '../../services/shopService';
 import { ActivityIndicator } from 'react-native';
 import { capitalizeLetter, showToast } from '../../utils/functions';
+import { setUser } from '../../features/auth/authSlice';
 
 const ProductScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const productId = useSelector(state => state.shopReducer.productId);
+    const user = useSelector(state => state.authReducer.email);
     const { data: product, error, isLoading } = useGetProductQuery(productId);
 
     const handleAdd = (product) => {
@@ -44,11 +46,10 @@ const ProductScreen = ({ navigation }) => {
                             />
                         </View>
                         <Text style={styles.productDescription}>{product.descripcionLarga}</Text>
-                        <Pressable onPress={() => handleAdd(product)} style={styles.carritoBtn}><Text style={styles.carritoBtnText}>Agregar al carrito</Text></Pressable>
-                        <Pressable style={styles.favoritoBtn}>
-                            <HeartFavorite />
-                            <Text style={styles.favoritoBtnText}>Favorito</Text>
-                        </Pressable>
+                        {user === 'Invited' ?
+                            <Pressable onPress={() => dispatch(setUser(""))} style={styles.carritoBtnNoLogin}><Text style={styles.carritoBtnTextNoLogin}>Debes loguearte para agregar productos al carrito</Text></Pressable>
+                            :
+                            <Pressable onPress={() => handleAdd(product)} style={styles.carritoBtn}><Text style={styles.carritoBtnText}>Agregar al carrito</Text></Pressable>}
                     </View>
                 </ScrollView>}
         </>
@@ -102,21 +103,19 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontStyle: "italic",
     },
-    favoritoBtn: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "red",
-        paddingVertical: 16,
-        borderRadius: 30,
-        backgroundColor: "#005e804f",
-        gap: 8
-    },
-    favoritoBtnText: {
-        fontSize: 23,
+    carritoBtnTextNoLogin: {
+        fontSize: 20,
         textAlign: "center",
         fontWeight: "bold",
         fontStyle: "italic",
+    },
+    carritoBtnNoLogin: {
+        justifyContent: "center",
+        backgroundColor: "red",
+        paddingVertical: 16,
+        borderRadius: 20,
+        backgroundColor: colors.cardColor,
+        marginBottom: 6
     },
     spinner: {
         margin: "auto"

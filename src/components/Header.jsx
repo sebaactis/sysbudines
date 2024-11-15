@@ -41,15 +41,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoHeader: {
-    width: 180,
-    marginTop: 30
+    width: 180
   },
   toastSuccess: {
     marginTop: 20,
     borderLeftColor: "#0c8308"
   },
   logoutIcon: {
-    marginLeft: 33,
+    marginLeft: 47,
     marginRight: 20,
     backgroundColor: '#00000073',
     padding: 5,

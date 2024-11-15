@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     orderCardContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        marginBottom: 20
     },
     orderDataCont: {
         gap: 3

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Location from 'expo-location';
@@ -8,23 +8,26 @@ import Toast from 'react-native-toast-message';
 import { showToast } from '../../utils/functions';
 import { useGetLocationsQuery, usePostLocationMutation } from '../../services/locationService';
 import { v4 as uuidv4 } from 'uuid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../../global/colors';
-import { useFocusEffect } from '@react-navigation/native';
+import { setUser } from '../../features/auth/authSlice';
 
 const GEO_URL = process.env.EXPO_PUBLIC_GEOCODING_API_KEY
 
 const LocationScreen = () => {
 
     const user = useSelector(state => state.authReducer.email)
-    const {data: locations = [], error, isLoading, refetch} = useGetLocationsQuery(user);
+    const { data: fetchedLocations = [], error, isLoading, refetch } = useGetLocationsQuery(user);
 
+    const [locations, setLocations] = useState(fetchedLocations);
     const [location, setLocation] = useState(null);
     const [address, setAddress] = useState("")
     const [title, setTitle] = useState("")
 
     const [triggerPostLocation, result] = usePostLocationMutation()
+
+    const dispatch = useDispatch()
 
     const renderPlaceItem = ({ item }) => (
         <FlatCard style={styles.placeContainer}>
@@ -104,6 +107,7 @@ const LocationScreen = () => {
             try {
 
                 await triggerPostLocation(newPlace)
+                setLocations((prev) => [...prev, newPlace]);
                 setTitle("");
                 setLocation("");
             } catch (error) {
@@ -112,18 +116,12 @@ const LocationScreen = () => {
         }
     }
 
-    useFocusEffect(
-        useCallback(() => {
-          refetch()
-        }, [refetch])
-      );
-
     return (
         <>
             <Text style={styles.locationTitle}>Mis direcciones</Text>
             <View style={styles.locationContainer}>
 
-                <View style={styles.locationInputContainer}>
+                {user !== 'Invited' && <View style={styles.locationInputContainer}>
                     <TextInput style={styles.locationInput} placeholder="Ingresa un título" onChangeText={(text) => setTitle(text)} />
                     <Pressable onPress={getLocation}>
                         <Icon name="add-location-alt" size={32} color="orange" />
@@ -131,7 +129,7 @@ const LocationScreen = () => {
                     <Pressable onPress={savePlace}>
                         <Icon name="add-circle-outline" size={32} color="orange" />
                     </Pressable>
-                </View>
+                </View>}
                 {locations.length <= 0 && <Text style={styles.dontHavePlacesText}>No tienes ubicaciones actualmente ☹️</Text>}
                 {isLoading && <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />}
                 {locations && <FlatList
@@ -139,6 +137,11 @@ const LocationScreen = () => {
                     keyExtractor={item => item.id}
                     renderItem={renderPlaceItem}
                 />}
+                {user === 'Invited' &&
+                    <View style={styles.noLogInContainer}>
+                        <Text style={styles.noLogIn}>Debes loguearse para guardar ubicaciones</Text>
+                        <Pressable onPress={() => dispatch(setUser(""))} style={styles.noLogInBtn}><Text style={styles.noLogInBtnText}>Ir al login</Text></Pressable>
+                    </View>}
             </View>
         </>
     );
@@ -204,7 +207,28 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 30,
         fontSize: 18,
-        fontWeight: 700,
+        fontWeight: '700',
         fontStyle: 'italic'
+    },
+    noLogInContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15,
+        marginBottom: 35
+    },
+    noLogIn: {
+        fontSize: 18,
+        fontStyle: 'italic',
+    },
+    noLogInBtn: {
+        backgroundColor: colors.principal,
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderRadius: 10
+    },
+    noLogInBtnText: {
+        fontSize: 18,
+        fontStyle: 'italic',
+        fontWeight: 'bold'
     }
 });

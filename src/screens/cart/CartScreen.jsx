@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, FlatList, ScrollView } from 'react-native'
 import React, { useMemo } from 'react'
 import CartCard from '../../components/CartCard';
 import { colors } from '../../global/colors';
@@ -8,6 +8,7 @@ import { clearCart } from '../../features/cart/cartSlice';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { showToast } from '../../utils/functions';
+import { setUser } from '../../features/auth/authSlice';
 
 const CartScreen = ({ navigation }) => {
   const cart = useSelector(state => state.cartReducer.items)
@@ -46,17 +47,22 @@ const CartScreen = ({ navigation }) => {
           <Pressable onPress={() => navigation.navigate("Tienda")} style={styles.cardEmptyBtn}>
             <Text style={styles.cardEmptyBtnText}>Ver Productos</Text>
           </Pressable>
+
+          {user === 'Invited' && <Pressable onPress={() => dispatch(setUser(""))} style={styles.cardEmptyBtn}>
+            <Text style={styles.cardEmptyBtnText}>Iniciar sesion para comprar</Text>
+          </Pressable>}
         </View>
       }
-      <View style={styles.cartItemsContainer}>
+
+      <ScrollView style={styles.cartTotalCheckContainer}>
         {cart.map(cartItem => (
           <CartCard key={cartItem.id} item={cartItem} />
         ))}
-      </View>
-      {cartEmpty ? null : <Text style={styles.cartTotalPrice}>Total: ${total}</Text>}
-      {cartEmpty ? null : <Pressable style={styles.cartFinalizarBtn}>
-        <Text onPress={() => handleCreateOrder()} style={styles.cartFinalizarBtnText}>Finalizar Compra</Text>
-      </Pressable>}
+        {cartEmpty ? null : <Text style={styles.cartTotalPrice}>Total: ${total}</Text>}
+        {cartEmpty ? null : <Pressable style={styles.cartFinalizarBtn}>
+          <Text onPress={() => handleCreateOrder()} style={styles.cartFinalizarBtnText}>Finalizar Compra</Text>
+        </Pressable>}
+      </ScrollView>
     </View>
   )
 }
@@ -117,5 +123,8 @@ const styles = StyleSheet.create({
   },
   cardEmptyBtnText: {
     fontWeight: 'bold',
+  },
+  cartTotalCheckContainer: {
+    marginBottom: 70
   }
 })

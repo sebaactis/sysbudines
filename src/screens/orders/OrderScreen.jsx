@@ -1,11 +1,12 @@
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React from 'react'
 import { useGetOrderQuery } from '../../services/orderService';
 import { dateOptions } from '../../global/constants';
 import { colors } from '../../global/colors';
 import { FlatList } from 'react-native';
+import PressableBack from '../../components/PressableBack';
 
-const OrderScreen = ({ route }) => {
+const OrderScreen = ({ route, navigation }) => {
 
     const { orderId } = route.params;
     const { data: order, error, isLoading, refetch } = useGetOrderQuery(orderId);
@@ -28,9 +29,11 @@ const OrderScreen = ({ route }) => {
 
     return (
         <>
+            <PressableBack callback={() => navigation.goBack()} />
             {isLoading
                 ? <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />
                 : <View style={styles.orderCont}>
+
                     <Text style={styles.orderTitle}>Detalle de orden</Text>
                     <View style={styles.detailsOrderCont}>
                         <View style={styles.detailsOrderSubCont}>
@@ -71,7 +74,8 @@ export default OrderScreen
 const styles = StyleSheet.create({
     orderCont: {
         marginHorizontal: 30,
-        gap: 20
+        gap: 15,
+        marginBottom: 20
     },
     orderTitle: {
         textAlign: 'center',
@@ -91,7 +95,8 @@ const styles = StyleSheet.create({
     },
     detailsOrderContNoBod: {
         flexDirection: 'row',
-        gap: 134
+        gap: 134,
+        marginBottom: 5
     },
     detailsOrderTitle: {
         opacity: 0.5,
@@ -114,8 +119,6 @@ const styles = StyleSheet.create({
     cartItemCont: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
-        
     },
     cartItemPrecio: {
         marginTop: 21,

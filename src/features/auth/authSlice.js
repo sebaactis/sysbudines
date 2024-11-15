@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { showToast } from "../../utils/functions";
 
 const initialState = {
     email: null,
@@ -19,6 +20,8 @@ export const authSlice = createSlice({
         clearUser: (state) => {
             state.email = null
             state.token = null
+            state.localId = null
+            showToast('success', 'Cerraste sesión correctamente ✅', "Vuelve pronto! 👋", 1500)
         },
         setProfileImage: (state, action) => {
             state.profileImage = action.payload
