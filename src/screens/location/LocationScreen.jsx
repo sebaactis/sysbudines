@@ -27,9 +27,10 @@ const LocationScreen = () => {
         try {
             await triggerPostLocation(newPlace)
             setLocations((prev) => [...prev, newPlace]);
+            showToast('success', 'Dirección guardada correctamente! ✅', "", 2000)
             refetch();
         } catch (error) {
-            showToast('error', 'No se pudo guardar la localización ❌', 'Por favor intenta de nuevo', 2000)
+            showToast('error', 'No se pudo guardar la dirección ❌', 'Por favor intenta de nuevo', 2000)
         }
     }
 
@@ -37,7 +38,6 @@ const LocationScreen = () => {
         <>
             <Text style={styles.locationTitle}>Mis direcciones</Text>
             <View style={styles.locationContainer}>
-
                 <LocationInput
                     user={user}
                     onSave={savePlace}
@@ -45,7 +45,7 @@ const LocationScreen = () => {
 
                 {isLoading && <ActivityIndicator style={styles.spinner} size="large" color={colors.principal} />}
 
-                {locations && <LocationList locations={fetchedLocations} />}
+                {(locations && !isLoading) && <LocationList locations={fetchedLocations} />}
 
                 {user === 'Invited' &&
                     <View style={styles.noLogInContainer}>
@@ -65,7 +65,6 @@ export default LocationScreen;
 const styles = StyleSheet.create({
     locationContainer: {
         flex: 1,
-        justifyContent: 'center',
         gap: 20
     },
     locationTitle: {
