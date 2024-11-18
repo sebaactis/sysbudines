@@ -62,6 +62,7 @@ export default function ProductsScreen({ navigation }) {
                         keyExtractor={prod => prod.id}
                         renderItem={renderProductItem}
                         numColumns={2}
+                        style={styles.productsList}
                     />
                 </View>}
         </>
@@ -113,5 +114,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         fontStyle: "italic",
+    },
+    productsList: {
+        marginBottom: 200
     }
 });
