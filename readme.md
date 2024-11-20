@@ -27,13 +27,11 @@ Asegúrate de tener instalados:
 
 ### Instalación
 
-1. Clona este repositorio:
+1. Clona este repositorio y ejecutar lo siguiente para correr el proyecto:
 
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
-   cd tu-repositorio
-
-   npm install
-
-    expo start
+   - git clone https://github.com/tu-usuario/tu-repositorio.git
+   - cd tu-repositorio
+   - npm install
+   - expo start
 
