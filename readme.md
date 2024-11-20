@@ -27,7 +27,7 @@ Asegúrate de tener instalados:
 
 ### Instalación
 
-1. Clona este repositorio y ejecutar lo siguiente para correr el proyecto:
+Clona este repositorio y ejecutar lo siguiente para correr el proyecto:
 
    ```bash
    - git clone https://github.com/tu-usuario/tu-repositorio.git
