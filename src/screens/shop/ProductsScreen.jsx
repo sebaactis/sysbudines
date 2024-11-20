@@ -1,15 +1,13 @@
-import { View, Text, StyleSheet, FlatList, Image, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { useEffect, useState } from 'react'
-import FlatCard from '../../components/FlatCard';
 import Search from '../../components/Search';
 import { BackArrow } from '../../Icons';
-import { colors } from '../../global/colors';
 import PressableBack from '../../components/PressableBack';
-import { useDispatch, useSelector } from 'react-redux';
-import { setProduct } from '../../features/shop/shopSlice';
+import { useSelector } from 'react-redux';
 import { useGetProductsByCategoryQuery } from '../../services/shopService';
 import { ActivityIndicator } from 'react-native';
-import { capitalizeLetter } from '../../utils/functions';
+import ProductList from '../../components/product/ProductList';
+import { colors } from '../../global/colors';
 
 export default function ProductsScreen({ navigation }) {
     const [productsFiltered, setProductsFiltered] = useState([]);
@@ -17,7 +15,6 @@ export default function ProductsScreen({ navigation }) {
 
     const category = useSelector(state => state.shopReducer.categorySelected);
     const { data: productsFilteredCategory, error, isLoading } = useGetProductsByCategoryQuery(category);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         setProductsFiltered(productsFilteredCategory)
@@ -27,28 +24,6 @@ export default function ProductsScreen({ navigation }) {
     }, [search, productsFilteredCategory])
 
 
-    const renderProductItem = ({ item }) => {
-        return (
-            <Pressable onPress={() => {
-                dispatch(setProduct(item.id))
-                navigation.navigate('Producto')
-            }} style={styles.productContainer}>
-                <FlatCard style={styles.productCardItem}>
-                    <View style={styles.productImageContainer}>
-                        <Image
-                            source={{ uri: item.image }}
-                            style={styles.image}
-                        />
-                    </View>
-                    <View style={styles.productsData}>
-                        <Text style={styles.productName}>{item.nombre}</Text>
-                        <Text style={styles.productCategoryText}>Categoria: {capitalizeLetter(item.categoria)}</Text>
-                        <Text style={styles.productPrice}>${item.precio}</Text>
-                    </View>
-                </FlatCard >
-            </Pressable>
-        )
-    }
 
     return (
         <>
@@ -57,13 +32,9 @@ export default function ProductsScreen({ navigation }) {
                     <PressableBack callback={() => navigation.goBack()} />
                     <Text style={styles.productosTitle}>Productos</Text>
                     <Search setSearch={setSearch} />
-                    <FlatList
-                        data={productsFiltered}
-                        keyExtractor={prod => prod.id}
-                        renderItem={renderProductItem}
-                        numColumns={2}
-                        style={styles.productsList}
-                    />
+                    <ProductList
+                        navigation={navigation} 
+                        products={productsFiltered} />
                 </View>}
         </>
     )
@@ -77,45 +48,4 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
     },
-    productImageContainer: {
-        backgroundColor: colors.cardColor,
-        borderRadius: 15,
-        justifyContent: "center",
-        marginLeft: 15,
-        padding: 10
-    },
-    image: {
-        width: 140,
-        height: 140,
-        alignSelf: "center"
-    },
-    productContainer: {
-        flexBasis: "45%",
-        maxWidth: "45%",
-        margin: 10
-    },
-    productCardItem: {
-        flexDirection: "column",
-        alignItems: "start",
-    },
-    productsData: {
-        justifyContent: "center",
-        marginLeft: 20,
-        gap: 3
-    },
-    productCategoryText: {
-        fontSize: 11.5,
-    },
-    productName: {
-        fontSize: 15,
-        marginTop: 4
-    },
-    productPrice: {
-        fontSize: 20,
-        fontWeight: "bold",
-        fontStyle: "italic",
-    },
-    productsList: {
-        marginBottom: 200
-    }
 });

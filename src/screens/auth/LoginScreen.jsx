@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useLoginMutation } from '../../services/authService'
 import { colors } from '../../global/colors'
@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message'
 import { showToast } from '../../utils/functions'
 import { insertSession } from '../../db'
 import { loginSchema } from '../../validations/loginSchema'
+import LoginInputContainer from '../../components/auth/login/LoginInputContainer'
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -70,25 +71,17 @@ const RegisterScreen = ({ navigation }) => {
           <Text style={styles.registerTitle}>Bienvenido/a de nuevo!</Text>
           <Text style={styles.registerSubTitle}>Iniciar Sesión para continuar</Text>
         </View>
-        <View style={styles.inputsCont}>
-          <TextInput
-            placeholder='Email'
-            placeholderTextColor="#00000075"
-            style={styles.input}
-            onChangeText={(text) => setEmail(text)}
-          />
-          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
-          <TextInput
-            placeholder='Password'
-            placeholderTextColor="#00000075"
-            style={styles.input}
-            onChangeText={(text) => setPassword(text)}
-          />
-          
-          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
-        </View>
-        <Pressable onPress={onSubmit} style={styles.registerBtn}><Text style={styles.registerBtnText}>Login</Text></Pressable>
+        <LoginInputContainer
+          setEmail={setEmail}
+          setPassword={setPassword}
+          emailError={emailError}
+          passwordError={passwordError}
+        />
+
+        <Pressable onPress={onSubmit} style={styles.registerBtn}>
+          <Text style={styles.registerBtnText}>Login</Text>
+        </Pressable>
         <Text style={styles.textCuenta}>No tienes cuenta? <Text onPress={() => navigation.navigate("Register")} style={styles.subTextCuenta}>Ingresá acá</Text></Text>
       </View>
     </LinearGradient>
@@ -120,17 +113,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontStyle: 'italic',
   },
-  inputsCont: {
-    gap: 15,
-  },
-  input: {
-    backgroundColor: "#ffffffcb",
-    paddingRight: 80,
-    paddingLeft: 15,
-    paddingVertical: 22,
-    borderRadius: 30,
-    textAlign: 'start'
-  },
   registerBtn: {
     backgroundColor: "#f7d7ab",
     paddingHorizontal: 30,
@@ -153,12 +135,5 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#f7d7ab',
     fontStyle: 'italic',
-  },
-  error: {
-    textAlign: 'center',
-    fontWeight: '700',
-    fontSize: 16,
-    color: 'red',
-    fontStyle: 'italic'
   }
 })

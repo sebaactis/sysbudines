@@ -3,7 +3,7 @@ import { object, ref, string } from "yup";
 export const registerSchema = object().shape({
         confirmPassword: string()
         .oneOf([ref('password'), null], "Las contraseñas deben coincidir")
-        .required(),
+        .required('La confirmacion de la contraseña es requerida'),
         password: string()
         .required('La contraseña es requerida')
         .min(6, 'La contraseña debe tener como mínimo 6 caracteres'),
